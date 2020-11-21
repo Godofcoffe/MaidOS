@@ -13,7 +13,7 @@ def maid(os='windows'):
         c = 'c:/Windows/Temp'
         chdir(c)
         d = scandir(c)
-        print(f'abrindo {c}')
+        print(f'Abrindo {c}')
         for pasta in d:
             if pasta.is_file():
                 sleep(0.2)
@@ -39,7 +39,7 @@ def maid(os='windows'):
         c = 'c:/Users/Douglas/AppData/Local/Temp'
         chdir(c)
         d = scandir(c)
-        print(f'abrindo {c}')
+        print(f'Abrindo {c}')
         for pasta in d:
             if pasta.is_file():
                 sleep(0.2)
@@ -66,7 +66,7 @@ def maid(os='windows'):
         c = 'c:/Windows/Prefetch'
         chdir(c)
         d = scandir(c)
-        print(f'abrindo {c}')
+        print(f'Abrindo {c}')
         for pasta in d:
             if pasta.is_file():
                 sleep(0.2)
