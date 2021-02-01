@@ -6,3 +6,4 @@
 .idea/inspectionProfiles/profiles_settings.xml
 .idea/.gitignore
 __pycache__/faxina.cpython-39.pyc
+*.pyc
