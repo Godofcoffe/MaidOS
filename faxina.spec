@@ -4,7 +4,7 @@ block_cipher = None
 
 
 a = Analysis(['faxina.py'],
-             pathex=['C:\\Users\\kevin\\Documents\\git\\repositorios\\MaidOS\\dist'],
+             pathex=['C:\\Users\\kevin\\Documents\\git\\repositorios\\MaidOS\\.py'],
              binaries=[],
              datas=[],
              hiddenimports=[],
