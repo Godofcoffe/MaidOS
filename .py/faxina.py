@@ -121,7 +121,7 @@ class Maid:
                             cont += 1
         print('limpeza completa!')
         print(f'# {cont} arquivos e pastas apagados.')
-        print(f'# {(self.dir1+self.dir2+self.dir3) / 1000000:.2f}MB limpos do sistema.')
+        print(f'# {(self.dir1 + self.dir2 + self.dir3) / 1000000:.2f}MB limpos do sistema.')
         sleep(3)
 
     def sfc(self):
@@ -130,6 +130,20 @@ class Maid:
     def chkdsk(self):
         system('chkdsk')
 
+    def defrag(self, opc):
+        if opc == 'analizar':
+            system('defrag /C /H /A /U /V')
+            print('finalizado')
+            sleep(2)
+        elif opc == 'otimizarboot':
+            system('defrag /C /H /B /U /V')
+            print('finalizado')
+            sleep(2)
+        elif opc == 'defrag':
+            system('defrag /C /H /D /U /V')
+            print('finalizado')
+            sleep(2)
+
 
 # MENU
 print(f'{"***":/^40}')
@@ -137,13 +151,16 @@ print(f'Oque eu posso fazer por você hoje {Maid().usr}?')
 print("""
 [ 1 ] LIMPAR CACHE DE APPS E ARQUIVOS TEMPORÁRIOS
 [ 2 ] ESCANEAR E REPARAR ARQUIVOS DO SISTEMA OPERACIONAL
-[ 3 ] Verificação de Disco
-[ 4 ] Sair
+[ 3 ] VERIFICAÇÃO DE DISCO
+[ 4 ] DESFRAGMENTAR DISCO
+[ 5 ] SAIR
 """)
+
 while True:
     on = str(input('Opção: ')).strip()[0]
     if on in '1234':
         break
+
 if on == '1':
     print(f"""
 Os Arquivos nestes diretórios serãm apagados:
@@ -157,10 +174,31 @@ Os Arquivos nestes diretórios serãm apagados:
     if confirm == 'n':
         print('encerrando...')
         sleep(2)
+
 elif on == '2':
     Maid().sfc()
+
 elif on == '3':
     Maid().chkdsk()
+
 elif on == '4':
+    print(f"""
+[ 1 ] Somente Analize
+[ 2 ] Otimizar inicialização
+[ 3 ] desfragmentação tradicional
+""")
+    confirm = str(input('Opção: ')).lower().strip()[0]
+    if confirm == '1':
+        Maid().defrag('analizar')
+    elif confirm == '2':
+        Maid().defrag('otimizarboot')
+    elif confirm == '3':
+        Maid().defrag('defrag')
+    else:
+        print('Opção não existente.')
+        print('encerrando...')
+        sleep(2)
+
+elif on == '5':
     print('ENCERRANDO...')
     sleep(2)
