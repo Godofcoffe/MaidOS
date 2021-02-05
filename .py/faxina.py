@@ -130,19 +130,8 @@ class Maid:
     def chkdsk(self):
         system('chkdsk')
 
-    def defrag(self, opc):
-        if opc == 'analizar':
-            system('defrag /C /H /A /U /V')
-            print('finalizado')
-            sleep(2)
-        elif opc == 'otimizarboot':
-            system('defrag /C /H /B /U /V')
-            print('finalizado')
-            sleep(2)
-        elif opc == 'defrag':
-            system('defrag /C /H /D /U /V')
-            print('finalizado')
-            sleep(2)
+    def defrag(self):
+        system('defrag /C /H /D /U')
 
 
 # MENU
@@ -158,7 +147,7 @@ print("""
 
 while True:
     on = str(input('Opção: ')).strip()[0]
-    if on in '1234':
+    if on in '12345':
         break
 
 if on == '1':
@@ -182,22 +171,8 @@ elif on == '3':
     Maid().chkdsk()
 
 elif on == '4':
-    print(f"""
-[ 1 ] Somente Analize
-[ 2 ] Otimizar inicialização
-[ 3 ] desfragmentação tradicional
-""")
-    confirm = str(input('Opção: ')).lower().strip()[0]
-    if confirm == '1':
-        Maid().defrag('analizar')
-    elif confirm == '2':
-        Maid().defrag('otimizarboot')
-    elif confirm == '3':
-        Maid().defrag('defrag')
-    else:
-        print('Opção não existente.')
-        print('encerrando...')
-        sleep(2)
+    Maid().defrag()
+    print('finalizado')
 
 elif on == '5':
     print('ENCERRANDO...')
