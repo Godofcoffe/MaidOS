@@ -1,6 +1,8 @@
 # MaidOS
 ### Um programinha simples tipo toolkit para reparos e limpeza do windows.
 ***
+![screenshot](/.exemplo/TEMPLATE.PNG)
+
 * Descompacte
 * Execute o .exe
 
