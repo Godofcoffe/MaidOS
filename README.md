@@ -8,4 +8,4 @@
 
 **! Em caso de erro execute o .exe como administrador.**
 
-[Última versão](https://github.com/Godofcoffe/MaidOS/releases/tag/v0.5-alpha)
+[Baixe aqui a última versão](https://github.com/Godofcoffe/MaidOS/releases/tag/v0.5-alpha)
