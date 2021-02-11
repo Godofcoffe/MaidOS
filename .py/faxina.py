@@ -6,12 +6,6 @@ from requests import get
 
 class Maid:
     def __init__(self):
-        vs = Maid().versao()
-        self.response = vs.text
-        index = self.response.find('tag_name')
-        versaoAtual = self.response[index:index + 22]
-        with open('.version', 'w+') as arqv:
-            arqv.write(versaoAtual)
         self.usr = getlogin()
         self.diretorios = ['c:/Windows/Temp', f'c:/Users/{self.usr}/AppData/Local/Temp', 'c:/Windows/Prefetch']
 
@@ -189,12 +183,6 @@ elif on == '5':
     print('ENCERRANDO...')
     sleep(2)
 elif on == '?':
-    resp = Maid().response
-    with open('.version', 'r') as arquivo:
-        index2 = resp.find('tag_name')
-        if arquivo.read() != resp[index2:index2 + 22]:
-            print('A uma nova versão disponivel.')
-
     print(f"""
     Limpar cache de apps e arquivos temporarios:
         Apaga TODOS os aquivos POSSIVEIS em diretórios conhecidos que armazenam o cache de aplicações
