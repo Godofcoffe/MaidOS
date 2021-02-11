@@ -1,10 +1,17 @@
 from os import scandir, remove, getlogin, system, path
 from time import sleep
 from shutil import rmtree
+from requests import get
 
 
 class Maid:
     def __init__(self):
+        vs = Maid().versao()
+        self.response = vs.text
+        index = self.response.find('tag_name')
+        versaoAtual = self.response[index:index + 22]
+        with open('.version', 'w+') as arqv:
+            arqv.write(versaoAtual)
         self.usr = getlogin()
         self.diretorios = ['c:/Windows/Temp', f'c:/Users/{self.usr}/AppData/Local/Temp', 'c:/Windows/Prefetch']
 
@@ -121,11 +128,14 @@ class Maid:
                 temp += path.getsize(arq)
         return temp
 
+    def versao(self):
+        return get('https://api.github.com/repos/Godofcoffe/MaidOS/releases/latest')
+
     def sfc(self):
         system('sfc /scannow')
 
     def chkdsk(self):
-        system('chkdsk')
+        system('chkdsk /R /V')
 
     def defrag(self):
         system('defrag /C /H /D /U')
@@ -134,6 +144,7 @@ class Maid:
 # MENU
 print(f'{"***":/^60}')
 print(f'Oque eu posso fazer por você hoje {Maid().usr}?')
+print('Digite "?" para exibir mais informações sobre as funções e o programa.')
 print("""
 [ 1 ] LIMPAR CACHE DE APPS E ARQUIVOS TEMPORÁRIOS
 [ 2 ] ESCANEAR E REPARAR ARQUIVOS DO SISTEMA OPERACIONAL
@@ -144,7 +155,7 @@ print("""
 
 while True:
     on = str(input('Opção: ')).strip()[0]
-    if on in '12345':
+    if on in '12345?':
         break
 
 if on == '1':
@@ -177,3 +188,27 @@ elif on == '4':
 elif on == '5':
     print('ENCERRANDO...')
     sleep(2)
+elif on == '?':
+    resp = Maid().response
+    with open('.version', 'r') as arquivo:
+        index2 = resp.find('tag_name')
+        if arquivo.read() != resp[index2:index2 + 22]:
+            print('A uma nova versão disponivel.')
+
+    print(f"""
+    Limpar cache de apps e arquivos temporarios:
+        Apaga TODOS os aquivos POSSIVEIS em diretórios conhecidos que armazenam o cache de aplicações
+        e arquivos usados anteriormente por aplicativos já desistalados.
+
+    Escanear e reparar arquivos do sistema operacional:
+        Verifica a integridade de todos os arquivos do sistema protegidos
+        e repara os arquivos com problemas quando possível.
+
+    Verificação de disco:
+         Localiza setores inválidos e recupera informações legíveis.
+
+    Desfragmentar disco:
+        Executa a operação na prioridade normal e executa a desfragmentação tradicional.
+        Em um volume em camadas, a desfragmentação tradicional é executada somente na camada de Capacidade.
+        (Em cada volume, executa apenas as operações preferenciais da lista de operações fornecida.)
+""")
