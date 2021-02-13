@@ -113,7 +113,9 @@ class Maid:
                             cont += 1
         print('limpeza completa!')
         print(f'# {cont} arquivos e pastas apagados.')
-        sleep(3)
+        print(f'# {self.tamDir(self.diretorios[0])+self.tamDir(self.diretorios[1])+self.tamDir(self.diretorios[2])}MB'
+              f'de memória limpa.')
+        sleep(5)
 
     def tamDir(self, diretorio):
         temp = 0
@@ -200,3 +202,4 @@ elif on == '?':
         Em um volume em camadas, a desfragmentação tradicional é executada somente na camada de Capacidade.
         (Em cada volume, executa apenas as operações preferenciais da lista de operações fornecida.)
 """)
+    input('Pressione ENTER para sair...')
