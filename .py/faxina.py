@@ -1,142 +1,146 @@
 from os import scandir, remove, getlogin, system, path
 from time import sleep
 from shutil import rmtree
+from requests import get
 
 
 class Maid:
     def __init__(self):
         self.usr = getlogin()
-        self.caminho = 'c:/Windows/Temp'
-        self.caminho2 = f'c:/Users/{self.usr}/AppData/Local/Temp'
-        self.caminho3 = 'c:/Windows/Prefetch'
-        self.dir1 = path.getsize(self.caminho)
-        self.dir2 = path.getsize(self.caminho2)
-        self.dir3 = path.getsize(self.caminho3)
+        self.diretorios = ['c:/Windows/Temp', f'c:/Users/{self.usr}/AppData/Local/Temp', 'c:/Windows/Prefetch']
 
     def maid(self, os='windows'):
-        """
-        Aqui a um padrão de arquivos temporarios,desde do /data da memoria interna e outros que ficam em lugares...
-        inconvenientes.
-        """
         cont = 0
         if os == 'windows':
             scan = None
-            print(f'[ / ] Abrindo {self.caminho}')
+            print(f'[ / ] Abrindo {self.diretorios[0]}')
             try:
-                scandir(self.caminho)
+                scandir(self.diretorios[0])
             except PermissionError:
                 print('Não tenho permissão para entrar nesta pasta...\nTente de novo como administrador.')
             else:
-                scan = scandir(self.caminho)
+                scan = scandir(self.diretorios[0])
             sleep(1)
             if scan is not None:
-                for pasta in scan:
-                    if pasta.is_file():
+                for arq in scan:
+                    if arq.is_file():
                         try:
-                            remove(self.caminho + '/' + pasta.name)
+                            remove(self.diretorios[0] + '/' + arq.name)
                         except WindowsError:
-                            print(f'[ * ] Não posso apagar o arquivo {pasta.name} '
+                            print(f'[ * ] Não posso apagar o arquivo {arq.name} '
                                   f'e/ou ele está sendo executado.')
                             sleep(1)
                         else:
-                            print(f'[ + ] {pasta.name} apagada!')
+                            print(f'[ + ] {arq.name} apagada!')
                             cont += 1
 
-                    if pasta.is_dir():
-                        print(f'[ / ] Removendo {pasta.name}')
+                    if arq.is_dir():
+                        print(f'[ / ] Removendo {arq.name}')
                         try:
-                            rmtree(self.caminho + '/' + pasta.name)
+                            rmtree(self.diretorios[0] + '/' + arq.name)
                         except WindowsError:
-                            print(f'[ * ] Não posso apagar o arquivo {pasta.name} '
+                            print(f'[ * ] Não posso apagar o arquivo {arq.name} '
                                   f'e/ou ele está sendo executado.')
                             sleep(1)
                         else:
-                            print(f'[ + ] {pasta.name} apagado!')
+                            print(f'[ + ] {arq.name} apagado!')
                             cont += 1
             sleep(3)
 
             scan2 = None
-            print(f'[ / ] Abrindo {self.caminho2}')
+            print(f'[ / ] Abrindo {self.diretorios[1]}')
             try:
-                scandir(self.caminho2)
+                scandir(self.diretorios[1])
             except PermissionError:
                 print('Não tenho permissão para entrar nesta pasta...\nTente de novo como administrador.')
             else:
-                scan2 = scandir(self.caminho2)
+                scan2 = scandir(self.diretorios[1])
             sleep(1)
             if scan2 is not None:
-                for pasta in scan2:
-                    if pasta.is_file():
+                for arq in scan2:
+                    if arq.is_file():
                         try:
-                            remove(self.caminho2 + '/' + pasta.name)
+                            remove(self.diretorios[1] + '/' + arq.name)
                         except WindowsError:
-                            print(f'[ * ] Não posso apagar o arquivo {pasta.name} e/ou ele está sendo executado.')
+                            print(f'[ * ] Não posso apagar o arquivo {arq.name} e/ou ele está sendo executado.')
                             sleep(1)
                         else:
-                            print(f'[ + ] {pasta.name} apagado!')
+                            print(f'[ + ] {arq.name} apagado!')
                             cont += 1
 
-                    if pasta.is_dir():
-                        print(f'[ / ] Removendo {pasta.name}')
+                    if arq.is_dir():
+                        print(f'[ / ] Removendo {arq.name}')
                         try:
-                            rmtree(self.caminho2 + '/' + pasta.name)
+                            rmtree(self.diretorios[1] + '/' + arq.name)
                         except WindowsError:
-                            print(f'[ * ] Não posso apagar o arquivo {pasta.name} e/ou ele está sendo executado.')
+                            print(f'[ * ] Não posso apagar o arquivo {arq.name} e/ou ele está sendo executado.')
                             sleep(1)
                         else:
-                            print(f'[ + ] {pasta.name} apagado!')
+                            print(f'[ + ] {arq.name} apagado!')
                             cont += 1
             sleep(3)
 
             scan3 = None
-            print(f'[ / ] Abrindo {self.caminho3}')
+            print(f'[ / ] Abrindo {self.diretorios[2]}')
             try:
-                scandir(self.caminho3)
+                scandir(self.diretorios[2])
             except PermissionError:
                 print('Não tenho permissão para entrar nesta pasta...\nTente de novo como administrador.')
             else:
-                scan3 = scandir(self.caminho3)
+                scan3 = scandir(self.diretorios[2])
             sleep(1)
             if scan3 is not None:
-                for pasta in scan3:
-                    if pasta.is_file():
+                for arq in scan3:
+                    if arq.is_file():
                         try:
-                            remove(self.caminho3 + '/' + pasta.name)
+                            remove(self.diretorios[2] + '/' + arq.name)
                         except WindowsError:
-                            print(f'[ * ] Não posso apagar o arquivo {pasta.name} e/ou ele está sendo executado.')
+                            print(f'[ * ] Não posso apagar o arquivo {arq.name} e/ou ele está sendo executado.')
                             sleep(1)
                         else:
-                            print(f'[ + ] {pasta.name} apagado!')
+                            print(f'[ + ] {arq.name} apagado!')
                             cont += 1
 
-                    if pasta.is_dir():
-                        print(f'[ / ] Removendo pasta {pasta.name}')
+                    if arq.is_dir():
+                        print(f'[ / ] Removendo arq {arq.name}')
                         try:
-                            rmtree(self.caminho3 + '/' + pasta.name)
+                            rmtree(self.diretorios[2] + '/' + arq.name)
                         except WindowsError:
-                            print(f'[ * ] Não posso apagar o arquivo {pasta.name} e/ou ele está sendo executado.')
+                            print(f'[ * ] Não posso apagar o arquivo {arq.name} e/ou ele está sendo executado.')
                             sleep(1)
                         else:
-                            print(f'[ + ] {pasta.name} apagado!')
+                            print(f'[ + ] {arq.name} apagado!')
                             cont += 1
         print('limpeza completa!')
         print(f'# {cont} arquivos e pastas apagados.')
-        print(f'# {(self.dir1 + self.dir2 + self.dir3) / 1000000:.2f}MB limpos do sistema.')
-        sleep(3)
+        print(f'# {self.tamDir(self.diretorios[0])+self.tamDir(self.diretorios[1])+self.tamDir(self.diretorios[2])}MB'
+              f'de memória limpa.')
+        sleep(5)
+
+    def tamDir(self, diretorio):
+        temp = 0
+        with scandir(diretorio) as d:
+            for arq in d:
+                temp += path.getsize(arq)
+        return temp
+
+    def versao(self):
+        return get('https://api.github.com/repos/Godofcoffe/MaidOS/releases/latest')
 
     def sfc(self):
         system('sfc /scannow')
 
     def chkdsk(self):
-        system('chkdsk')
+        system('chkdsk /R /V')
 
     def defrag(self):
         system('defrag /C /H /D /U')
 
 
 # MENU
-print(f'{"***":/^40}')
+print(f'{"***":/^60}')
 print(f'Oque eu posso fazer por você hoje {Maid().usr}?')
+print('Digite "?" para exibir mais informações sobre as funções e o programa.')
 print("""
 [ 1 ] LIMPAR CACHE DE APPS E ARQUIVOS TEMPORÁRIOS
 [ 2 ] ESCANEAR E REPARAR ARQUIVOS DO SISTEMA OPERACIONAL
@@ -147,15 +151,18 @@ print("""
 
 while True:
     on = str(input('Opção: ')).strip()[0]
-    if on in '12345':
+    if on in '12345?':
         break
 
 if on == '1':
+    tamDir1 = Maid().tamDir(Maid().diretorios[0])
+    tamDir2 = Maid().tamDir(Maid().diretorios[1])
+    tamDir3 = Maid().tamDir(Maid().diretorios[2])
     print(f"""
 Os Arquivos nestes diretórios serãm apagados:
-'c:/Windows/Temp' - ({Maid().dir1 / 1000000:.2f})MB de espaço ocupado.
-'c:/Users/{Maid().usr}/AppData/Local/Temp' - ({Maid().dir2 / 1000000:.2f})MB de espaço ocupado.
-'c:/Windows/Prefetch' - ({Maid().dir3 / 1000000:.2f})MB de espaço ocupado.
+'c:/Windows/Temp' - ({tamDir1 / 1000000:.1f})MB de espaço ocupado.
+'c:/Users/{Maid().usr}/AppData/Local/Temp' - ({tamDir2 / 1000000:.1f})MB de espaço ocupado.
+'c:/Windows/Prefetch' - ({tamDir3 / 1000000:.1f})MB de espaço ocupado.
 """)
     confirm = str(input('Prosseguir [s/n]?: ')).strip().lower()[0]
     if confirm == 's':
@@ -177,3 +184,22 @@ elif on == '4':
 elif on == '5':
     print('ENCERRANDO...')
     sleep(2)
+elif on == '?':
+    print(f"""
+    Limpar cache de apps e arquivos temporarios:
+        Apaga TODOS os aquivos POSSIVEIS em diretórios conhecidos que armazenam o cache de aplicações
+        e arquivos usados anteriormente por aplicativos já desistalados.
+
+    Escanear e reparar arquivos do sistema operacional:
+        Verifica a integridade de todos os arquivos do sistema protegidos
+        e repara os arquivos com problemas quando possível.
+
+    Verificação de disco:
+         Localiza setores inválidos e recupera informações legíveis.
+
+    Desfragmentar disco:
+        Executa a operação na prioridade normal e executa a desfragmentação tradicional.
+        Em um volume em camadas, a desfragmentação tradicional é executada somente na camada de Capacidade.
+        (Em cada volume, executa apenas as operações preferenciais da lista de operações fornecida.)
+""")
+    input('Pressione ENTER para sair...')
