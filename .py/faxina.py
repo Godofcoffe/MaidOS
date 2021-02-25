@@ -95,7 +95,10 @@ class Maid:
 
 
 # MENU
+autor, versao = Maid().versao()
 print(f'{"MaidOS":.^55}')
+print(f'{versao:>55}')
+print(f'Autor: {autor}\n')
 print(f'Oque eu posso fazer por você hoje {Maid().usr}?')
 print('Digite "?" para exibir mais informações sobre as funções.')
 print("""
@@ -143,11 +146,7 @@ elif on == '0':
     print('ENCERRANDO...')
     sleep(2)
 elif on == '?':
-    autor, versao = Maid().versao()
     print(f"""
-    programinha feito por {autor}
-    MaidOS {versao}
-
     Limpar cache de apps e arquivos temporarios:
         Apaga TODOS os aquivos POSSIVEIS em diretórios conhecidos que armazenam o cache de aplicações
         e arquivos usados anteriormente por aplicativos já desistalados.
