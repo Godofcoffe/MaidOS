@@ -7,67 +7,82 @@ from requests import get
 class Maid:
     def __init__(self):
         self.usr = getlogin()
-        self.diretorios = ['C:/Windows/Temp',
-                           f'C:/Users/{self.usr}/AppData/Local/Temp',
-                           'C:/Windows/Prefetch',
-                           f'C:/Users/{self.usr}/Recent']
-        self.tamTotal = self.tamDir(self.diretorios[0])+self.tamDir(self.diretorios[1])+self.tamDir(self.diretorios[2])
+        self.diretorios = ['c:/Windows/Temp',
+                           f'c:/Users/{self.usr}/AppData/Local/Temp',
+                           'c:/Windows/Prefetch',
+                           f'c:/Users/{self.usr}/Recent']
+        self.tamTotal = 0
+        self.dirsPermitidos = self.verificarpermissao(self.diretorios)
+        for d in self.dirsPermitidos:
+            self.tamTotal += self.tamDir(d)
 
     def maid(self, os='windows'):
         cont = 0
         if os == 'windows':
-            for diretorio in self.diretorios:
-                scan = None
+            sleep(3)
+            for diretorio in self.dirsPermitidos:
+                scan = scandir(diretorio)
                 print(f'[ / ] Abrindo {diretorio}')
-                try:
-                    scandir(diretorio)
-                except PermissionError:
-                    print('Não tenho permissão para entrar nesta pasta...\nTente de novo como administrador.')
-                else:
-                    scan = scandir(diretorio)
                 sleep(1)
-                if scan is not None:
-                    for arq in scan:
-                        if arq.is_file():
-                            try:
-                                remove(diretorio + '/' + arq.name)
-                            except WindowsError:
-                                print(f'[ * ] Não posso apagar o arquivo {arq.name} '
-                                      f'e/ou ele está sendo executado.')
-                                sleep(1)
-                            else:
-                                print(f'[ + ] {arq.name} apagada!')
-                                cont += 1
-                                sleep(0.5)
+                for arq in scan:
+                    if arq.is_file():
+                        try:
+                            remove(diretorio + '/' + arq.name)
+                        except WindowsError:
+                            print(f'[ * ] Não posso apagar o arquivo {arq.name} '
+                                  f'e/ou ele está sendo executado.')
+                            sleep(1)
+                        else:
+                            print(f'[ + ] {arq.name} apagada!')
+                            cont += 1
+                            sleep(0.5)
 
-                        if arq.is_dir():
-                            print(f'[ / ] Removendo {arq.name}')
-                            try:
-                                rmtree(diretorio + '/' + arq.name)
-                            except WindowsError:
-                                print(f'[ * ] Não posso apagar o arquivo {arq.name} '
-                                      f'e/ou ele está sendo executado.')
-                                sleep(1)
-                            else:
-                                print(f'[ + ] {arq.name} apagado!')
-                                cont += 1
-                                sleep(0.5)
+                    if arq.is_dir():
+                        print(f'[ / ] Removendo {arq.name}')
+                        try:
+                            rmtree(diretorio + '/' + arq.name)
+                        except WindowsError:
+                            print(f'[ * ] Não posso apagar a pasta {arq.name} '
+                                  f'e/ou ela está sendo executada.')
+                            sleep(1)
+                        else:
+                            print(f'[ + ] {arq.name} apagada!')
+                            cont += 1
+                            sleep(0.5)
         sleep(3)
 
         print('limpeza completa!')
         print(f'# {cont} arquivos e/ou pastas apagados.')
-        print(f'# {self.tamTotal / 1000000:.1f}MB de memória limpa.')
+        print(f'# {self.tamTotal / 1000000:.2f}MB de memória limpa.')
         sleep(5)
+
+    def verificarpermissao(self, list_dir, verbose=False):
+        aceitos = []
+        for diretorio in list_dir:
+            try:
+                scandir(diretorio)
+            except PermissionError:
+                if verbose:
+                    print(f'Não tenho permissão para entrar nesta pasta...\n{diretorio}\n'
+                          f'Tente de novo como administrador.\n')
+            else:
+                aceitos.append(diretorio)
+        return aceitos
 
     def tamDir(self, diretorio):
         temp = 0
-        with scandir(diretorio) as d:
-            for arq in d:
-                temp += path.getsize(arq)
-        return temp
+        try:
+            with scandir(diretorio) as d:
+                for arq in d:
+                    temp += path.getsize(arq)
+        except WindowsError:
+            print(f'Não pude verificar o espaço de {diretorio}')
+        else:
+            return temp
 
     def versao(self):
-        return get('https://api.github.com/repos/Godofcoffe/MaidOS/releases/latest')
+        r = get('https://api.github.com/repos/Godofcoffe/MaidOS/releases/latest')
+        return r.json()['author']['login'], r.json()['tag_name']
 
     def sfc(self):
         system('sfc /scannow')
@@ -80,34 +95,33 @@ class Maid:
 
 
 # MENU
-print(f'{"***":/^60}')
+print(f'{"MaidOS":.^55}')
 print(f'Oque eu posso fazer por você hoje {Maid().usr}?')
 print('Digite "?" para exibir mais informações sobre as funções.')
 print("""
-[ 1 ] LIMPAR CACHE DE APPS E ARQUIVOS TEMPORÁRIOS
-[ 2 ] ESCANEAR E REPARAR ARQUIVOS DO SISTEMA OPERACIONAL
-[ 3 ] VERIFICAÇÃO DE DISCO
-[ 4 ] DESFRAGMENTAR DISCO
-[ 5 ] SAIR
+[ 1 ] Limpar cache de Apps e arquivos temporarios
+[ 2 ] Escanear e reparar arquivos do sistema operacional
+[ 3 ] Verificação de disco
+[ 4 ] Desfragmentar disco
+[ 0 ] Sair
 """)
 
 while True:
-    on = str(input('Opção: ')).strip()[0]
-    if on in '12345?':
+    on = str(input('Opção > ')).strip()[0]
+    if on in '01234?':
         break
 
 if on == '1':
-    tamDir1 = Maid().tamDir(Maid().diretorios[0])
-    tamDir2 = Maid().tamDir(Maid().diretorios[1])
-    tamDir3 = Maid().tamDir(Maid().diretorios[2])
-    tamDir4 = Maid().tamDir(Maid().diretorios[3])
-    print(f"""
-Os Arquivos nestes diretórios serãm apagados:
-'c:/Windows/Temp' - ({tamDir1 / 1000000:.1f})MB de espaço ocupado.
-'c:/Users/{Maid().usr}/AppData/Local/Temp' - ({tamDir2 / 1000000:.1f})MB de espaço ocupado.
-'c:/Windows/Prefetch' - ({tamDir3 / 1000000:.1f})MB de espaço ocupado.
-'c:/Users/{Maid().usr}/Recent' - ({tamDir4 / 1000000:.1f})MB de espaço ocupado.
-""")
+    Maid().verificarpermissao(Maid().diretorios, True)
+    print('Os arquivos serão apagados nestes seguintes diretórios:')
+    for caminho in Maid().dirsPermitidos:
+        if Maid().tamDir(caminho) >= 1000000000:
+            print(f'{caminho} - ({Maid().tamDir(caminho) / 1000000000:.1f})GB de espaço ocupado.')
+        elif Maid().tamDir(caminho) >= 1000000:
+            print(f'{caminho} - ({Maid().tamDir(caminho) / 1000000:.1f})MB de espaço ocupado.')
+        elif Maid().tamDir(caminho) < 1000000:
+            print(f'{caminho} - ({Maid().tamDir(caminho) / 1000:.1f})kB de espaço ocupado.')
+
     confirm = str(input('Prosseguir [s/n]?: ')).strip().lower()[0]
     if confirm == 's':
         Maid().maid()
@@ -125,11 +139,15 @@ elif on == '4':
     Maid().defrag()
     print('finalizado')
 
-elif on == '5':
+elif on == '0':
     print('ENCERRANDO...')
     sleep(2)
 elif on == '?':
+    autor, versao = Maid().versao()
     print(f"""
+    programinha feito por {autor}
+    MaidOS {versao}
+
     Limpar cache de apps e arquivos temporarios:
         Apaga TODOS os aquivos POSSIVEIS em diretórios conhecidos que armazenam o cache de aplicações
         e arquivos usados anteriormente por aplicativos já desistalados.
