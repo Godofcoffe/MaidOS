@@ -146,6 +146,7 @@ elif on == '3':
 elif on == '4':
     Maid().defrag()
     print('finalizado')
+    sleep(3)
 
 elif on == '0':
     print('ENCERRANDO...')
