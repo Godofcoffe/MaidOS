@@ -6,6 +6,8 @@ from requests import get
 
 class Maid:
     def __init__(self):
+        self.__versaoAtual = 'v1.0.1-alpha'
+        self.__autor = 'Godofcoffe'
         self.usr = getlogin()
         self.diretorios = ['c:/Windows/Temp',
                            f'c:/Users/{self.usr}/AppData/Local/Temp',
@@ -15,6 +17,14 @@ class Maid:
         self.dirsPermitidos = self.verificarpermissao(self.diretorios)
         for d in self.dirsPermitidos:
             self.tamTotal += self.tamDir(d)
+
+    def info(self):
+        return self.__versaoAtual, self.__autor
+
+    def upgrade(self):
+        r = get('https://api.github.com/repos/Godofcoffe/MaidOS/releases/latest')
+        release = r.json()['tag_name']
+        return release
 
     def maid(self, os='windows'):
         cont = 0
@@ -80,10 +90,6 @@ class Maid:
         else:
             return temp
 
-    def versao(self):
-        r = get('https://api.github.com/repos/Godofcoffe/MaidOS/releases/latest')
-        return r.json()['author']['login'], r.json()['tag_name']
-
     def sfc(self):
         system('sfc /scannow')
 
@@ -95,10 +101,9 @@ class Maid:
 
 
 # MENU
-autor, versao = Maid().versao()
 print(f'{"MaidOS":.^55}')
-print(f'{versao:>55}')
-print(f'Autor: {autor}\n')
+print(f'{Maid().info()[0]:>55}')
+print(f'Autor: {Maid().info()[1]}\n')
 print(f'Oque eu posso fazer por você hoje {Maid().usr}?')
 print('Digite "?" para exibir mais informações sobre as funções.')
 print("""
