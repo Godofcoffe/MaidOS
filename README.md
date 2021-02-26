@@ -1,5 +1,5 @@
 # MaidOS
-### Um Utilitário em terminal para reparos e limpeza do windows.
+### Um utilitário em terminal para reparos e limpeza do windows.
 ***
 ![screenshot](/.exemplo/TEMPLATE.PNG)
 
