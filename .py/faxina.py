@@ -6,7 +6,7 @@ from requests import get
 
 class Maid:
     def __init__(self):
-        self.__versaoAtual = 'v1.0.1-alpha'
+        self.__versaoAtual = 'v1.1.0'
         self.__autor = 'Godofcoffe'
         self.usr = getlogin()
         self.diretorios = ['c:/Windows/Temp',
@@ -32,6 +32,7 @@ class Maid:
             sleep(3)
             for diretorio in self.dirsPermitidos:
                 scan = scandir(diretorio)
+                system('cls')
                 print(f'[ / ] Abrindo {diretorio}')
                 sleep(1)
                 for arq in scan:
@@ -45,7 +46,7 @@ class Maid:
                         else:
                             print(f'[ + ] {arq.name} apagada!')
                             cont += 1
-                            sleep(0.5)
+                            sleep(0.3)
 
                     if arq.is_dir():
                         print(f'[ / ] Removendo {arq.name}')
@@ -58,9 +59,10 @@ class Maid:
                         else:
                             print(f'[ + ] {arq.name} apagada!')
                             cont += 1
-                            sleep(0.5)
+                            sleep(0.3)
         sleep(3)
 
+        system('cls')
         print('limpeza completa!')
         print(f'# {cont} arquivos e/ou pastas apagados.')
         print(f'# {self.tamTotal / 1000000:.2f}MB de memória limpa.')
@@ -96,29 +98,28 @@ class Maid:
     def chkdsk(self):
         system('chkdsk /R /V')
 
-    def defrag(self):
-        system('defrag /C /H /D /U')
-
 
 # MENU
 print(f'{"MaidOS":.^55}')
 print(f'{Maid().info()[0]:>55}')
 print(f'Autor: {Maid().info()[1]}\n')
+if Maid().upgrade() != Maid().info()[0]:
+    print(f'> Há uma nova versão disponivel <'.center(55))
 print(f'Oque eu posso fazer por você hoje {Maid().usr}?')
 print('Digite "?" para exibir mais informações sobre as funções.')
 print("""
 [ 1 ] Limpar cache de Apps e arquivos temporarios
 [ 2 ] Escanear e reparar arquivos do sistema operacional
 [ 3 ] Verificação de disco
-[ 4 ] Desfragmentar disco
 [ 0 ] Sair
 """)
 
 while True:
     on = str(input('Opção > ')).strip()[0]
-    if on in '01234?':
+    if on in '0123?':
         break
 
+system('cls')
 if on == '1':
     Maid().verificarpermissao(Maid().diretorios, True)
     print('Os arquivos serão apagados nestes seguintes diretórios:')
@@ -143,14 +144,10 @@ elif on == '2':
 elif on == '3':
     Maid().chkdsk()
 
-elif on == '4':
-    Maid().defrag()
-    print('finalizado')
-    sleep(3)
-
 elif on == '0':
     print('ENCERRANDO...')
     sleep(2)
+
 elif on == '?':
     print(f"""
     Limpar cache de apps e arquivos temporarios:
@@ -163,11 +160,5 @@ elif on == '?':
 
     Verificação de disco:
          Localiza setores inválidos e recupera informações legíveis.
-
-    Desfragmentar disco:
-        Executa a operação na prioridade normal e executa a desfragmentação tradicional.
-        Em um volume em camadas, a desfragmentação tradicional é executada somente na camada de Capacidade.
-        (Em cada volume, executa apenas as operações preferenciais da lista de operações fornecida.)
-        Recomendado usar-lo em uma frequencia aproximada de 1 mês.
 """)
     input('Pressione ENTER para sair...')
