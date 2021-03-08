@@ -34,12 +34,12 @@ class Maid:
         cont = 0
         if os == 'windows':
             system('net stop wuauserv')  # para o processo de atualizações para limpeza do WinUpdate
-            sleep(3)
+            sleep(4)
             for diretorio in self.dirsPermitidos:
                 scan = scandir(diretorio)
                 system('cls')
                 print(f'[ / ] Abrindo {diretorio}')
-                sleep(1)
+                sleep(2)
                 for arq in scan:
                     if arq.is_file():
                         try:
@@ -68,9 +68,8 @@ class Maid:
         sleep(3)
 
         system('cls')
-        print('Executando limpeza de cache de DNS...')
         self.cacheDNS()
-        sleep(3)
+        sleep(4)
 
         system('cls')
         print('limpeza completa!')
