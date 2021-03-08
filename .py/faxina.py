@@ -12,7 +12,8 @@ class Maid:
         self.diretorios = ['c:/Windows/Temp',
                            f'c:/Users/{self.usr}/AppData/Local/Temp',
                            'c:/Windows/Prefetch',
-                           f'c:/Users/{self.usr}/Recent']
+                           f'c:/Users/{self.usr}/Recent',
+                           'c:/Windows/SoftwareDistribution/Download']
         self.tamTotal = 0
         self.dirsPermitidos = self.verificarpermissao(self.diretorios)
         self.carregarTamanho()
@@ -29,11 +30,12 @@ class Maid:
         for d in self.dirsPermitidos:
             self.tamTotal += self.tamDir(d)
 
-    def maid(self, list_dirs, os='windows'):
+    def maid(self, os='windows'):
         cont = 0
         if os == 'windows':
+            system('net stop wuauserv')  # para o processo de atualizações para limpeza do WinUpdate
             sleep(3)
-            for diretorio in list_dirs:
+            for diretorio in self.dirsPermitidos:
                 scan = scandir(diretorio)
                 system('cls')
                 print(f'[ / ] Abrindo {diretorio}')
@@ -66,9 +68,15 @@ class Maid:
         sleep(3)
 
         system('cls')
+        print('Executando limpeza de cache de DNS...')
+        self.cacheDNS()
+        sleep(3)
+
+        system('cls')
         print('limpeza completa!')
         print(f'# {cont} arquivos e/ou pastas apagados.')
         print(f'# {self.tamTotal / 1000000:.2f}MB de memória limpa.')
+        system('net start wuauserv')  # inicia o processo de atualizações
         sleep(5)
 
     def verificarpermissao(self, list_dir, verbose=False):
@@ -103,16 +111,6 @@ class Maid:
 
     def cacheDNS(self):
         system('ipconfig /flushdns')
-
-    def cacheWinUpdate(self):
-        winUpdate = ['c:/Windows/SoftwareDistribution/Download']
-        dir_aceito = self.verificarpermissao(winUpdate)
-        if bool(dir_aceito):
-            system('net stop wuauserv')
-            self.maid(dir_aceito)
-            system('net start wuauserv')
-        else:
-            print('Não pude limpar o cache de Atualização do Windows.')
 
 
 # MENU
@@ -149,9 +147,8 @@ if on == '1':
 
     confirm = str(input('Prosseguir [s/n]?: ')).strip().lower()[0]
     if confirm == 's':
-        Maid().maid(Maid().dirsPermitidos)
-        Maid().cacheDNS()
-        Maid().cacheWinUpdate()
+        Maid().maid()
+
     elif confirm == 'n':
         print('encerrando...')
         sleep(2)
@@ -168,22 +165,22 @@ elif on == '0':
 
 elif on == '?':
     print(f"""
-    Limpar cache de apps e arquivos temporários:
-        Apaga TODOS os aquivos POSSIVEIS em diretórios conhecidos que armazenam o cache de aplicações
-        e arquivos usados anteriormente por aplicativos já desistalados e também incluindo o cache de
-        atualizações do WindowsUpdate.
-            E os diretórios são:
-                c:/Windows/Temp,
-                c:/Users/{Maid().usr}/AppData/Local/Temp,
-                c:/Windows/Prefetch,
-                c:/Users/{Maid().usr}/Recent,
-                c:/Windows/SoftwareDistribution/Download
-
-    Escanear e reparar arquivos do sistema operacional:
-        Verifica a integridade de todos os arquivos do sistema protegidos
-        e repara os arquivos com problemas quando possível.
-
-    Verificação de disco:
-         Localiza setores inválidos e recupera informações legíveis.
-""")
+        Limpar cache de apps e arquivos temporários:
+            Apaga TODOS os aquivos POSSIVEIS em diretórios conhecidos que armazenam o cache de aplicações
+            e arquivos usados anteriormente por aplicativos já desistalados e também incluindo o cache de
+            atualizações do WindowsUpdate.
+                E os diretórios são:
+                    c:/Windows/Temp,
+                    c:/Users/{Maid().usr}/AppData/Local/Temp,
+                    c:/Windows/Prefetch,
+                    c:/Users/{Maid().usr}/Recent,
+                    c:/Windows/SoftwareDistribution/Download
+    
+        Escanear e reparar arquivos do sistema operacional:
+            Verifica a integridade de todos os arquivos do sistema protegidos
+            e repara os arquivos com problemas quando possível.
+    
+        Verificação de disco:
+             Localiza setores inválidos e recupera informações legíveis.
+    """)
     input('Pressione ENTER para sair...')
