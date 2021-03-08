@@ -6,7 +6,7 @@ from requests import get
 
 class Maid:
     def __init__(self):
-        self.__versaoAtual = 'v1.1.0'
+        self.__versaoAtual = 'v1.2.0'
         self.__autor = 'Godofcoffe'
         self.usr = getlogin()
         self.diretorios = ['c:/Windows/Temp',
@@ -15,8 +15,7 @@ class Maid:
                            f'c:/Users/{self.usr}/Recent']
         self.tamTotal = 0
         self.dirsPermitidos = self.verificarpermissao(self.diretorios)
-        for d in self.dirsPermitidos:
-            self.tamTotal += self.tamDir(d)
+        self.carregarTamanho()
 
     def info(self):
         return self.__versaoAtual, self.__autor
@@ -26,11 +25,15 @@ class Maid:
         release = r.json()['tag_name']
         return release
 
-    def maid(self, os='windows'):
+    def carregarTamanho(self):
+        for d in self.dirsPermitidos:
+            self.tamTotal += self.tamDir(d)
+
+    def maid(self, list_dirs, os='windows'):
         cont = 0
         if os == 'windows':
             sleep(3)
-            for diretorio in self.dirsPermitidos:
+            for diretorio in list_dirs:
                 scan = scandir(diretorio)
                 system('cls')
                 print(f'[ / ] Abrindo {diretorio}')
@@ -44,11 +47,11 @@ class Maid:
                                   f'e/ou ele está sendo executado.')
                             sleep(1)
                         else:
-                            print(f'[ + ] {arq.name} apagada!')
+                            print(f'[ + ] {arq.name} apagado!')
                             cont += 1
-                            sleep(0.3)
+                            sleep(0.2)
 
-                    if arq.is_dir():
+                    elif arq.is_dir():
                         print(f'[ / ] Removendo {arq.name}')
                         try:
                             rmtree(diretorio + '/' + arq.name)
@@ -59,7 +62,7 @@ class Maid:
                         else:
                             print(f'[ + ] {arq.name} apagada!')
                             cont += 1
-                            sleep(0.3)
+                            sleep(0.2)
         sleep(3)
 
         system('cls')
@@ -98,13 +101,26 @@ class Maid:
     def chkdsk(self):
         system('chkdsk /R /V')
 
+    def cacheDNS(self):
+        system('ipconfig /flushdns')
+
+    def cacheWinUpdate(self):
+        winUpdate = ['c:/Windows/SoftwareDistribution/Download']
+        dir_aceito = self.verificarpermissao(winUpdate)
+        if bool(dir_aceito):
+            system('net stop wuauserv')
+            self.maid(dir_aceito)
+            system('net start wuauserv')
+        else:
+            print('Não pude limpar o cache de Atualização do Windows.')
+
 
 # MENU
 print(f'{"MaidOS":.^55}')
 print(f'{Maid().info()[0]:>55}')
 print(f'Autor: {Maid().info()[1]}\n')
 if Maid().upgrade() != Maid().info()[0]:
-    print(f'> Há uma nova versão disponivel <'.center(55))
+    print(f'> Há uma nova versão disponivel <\n'.center(55))
 print(f'Oque eu posso fazer por você hoje {Maid().usr}?')
 print('Digite "?" para exibir mais informações sobre as funções.')
 print("""
@@ -133,8 +149,10 @@ if on == '1':
 
     confirm = str(input('Prosseguir [s/n]?: ')).strip().lower()[0]
     if confirm == 's':
-        Maid().maid()
-    if confirm == 'n':
+        Maid().maid(Maid().dirsPermitidos)
+        Maid().cacheDNS()
+        Maid().cacheWinUpdate()
+    elif confirm == 'n':
         print('encerrando...')
         sleep(2)
 
@@ -150,9 +168,16 @@ elif on == '0':
 
 elif on == '?':
     print(f"""
-    Limpar cache de apps e arquivos temporarios:
+    Limpar cache de apps e arquivos temporários:
         Apaga TODOS os aquivos POSSIVEIS em diretórios conhecidos que armazenam o cache de aplicações
-        e arquivos usados anteriormente por aplicativos já desistalados.
+        e arquivos usados anteriormente por aplicativos já desistalados e também incluindo o cache de
+        atualições do WindowsUpdate.
+            E os diretórios são:
+                c:/Windows/Temp,
+                c:/Users/{Maid().usr}/AppData/Local/Temp,
+                c:/Windows/Prefetch,
+                c:/Users/{Maid().usr}/Recent,
+                c:/Windows/SoftwareDistribution/Download
 
     Escanear e reparar arquivos do sistema operacional:
         Verifica a integridade de todos os arquivos do sistema protegidos
