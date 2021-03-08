@@ -171,7 +171,7 @@ elif on == '?':
     Limpar cache de apps e arquivos temporários:
         Apaga TODOS os aquivos POSSIVEIS em diretórios conhecidos que armazenam o cache de aplicações
         e arquivos usados anteriormente por aplicativos já desistalados e também incluindo o cache de
-        atualições do WindowsUpdate.
+        atualizações do WindowsUpdate.
             E os diretórios são:
                 c:/Windows/Temp,
                 c:/Users/{Maid().usr}/AppData/Local/Temp,
