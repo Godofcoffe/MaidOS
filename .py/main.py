@@ -1,6 +1,4 @@
-from faxina import Maid
-from os import system
-from time import sleep
+from faxina import *
 
 print(f'{"MaidOS":.^55}')
 print(f'{Maid().info()[0]:>55}')
