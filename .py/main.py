@@ -67,6 +67,27 @@ elif on == '?':
             e repara os arquivos com problemas quando possível.
 
         Verificação de disco:
-             Localiza setores inválidos e recupera informações legíveis.
+             Executa o comando nativo do windows CHKDSK, ele verifica a integridade do sistema de arquivos e
+             metadados do sistema operacional em um volume de disco. Alguns desses erros podem ser entradas
+             corrompidas na tabela mestre de arquivos (MFT), descritores de segurança incorretos associados
+             a arquivos ou até informações de tamanho de arquivo ou carimbo de hora desalinhados sobre arquivos
+             individuas.
+             
+             Usos:
+                * Chkdsk pode digitalizar, opcionalmente, todos os setores em um volume de disco em busca de
+                setores defeituosos. Os setores defeituoso podem apresentar-se de 2 formas: soft bad sectors,
+                que podem ocorrer quando os dados são mal escritos, e os hard bad sectors, quando há danos
+                fisico no disco.
+                    
+                A ferramenta tenta corrigir separando os soft bad sectors, e marcando os hard bad sectors
+                para eles não serem usados.
+                
+                * Em casos de problemas com aplicativos não carregando ou falhando.
+            
+            Recomendações:  
+                * Executar-lo a cada poucos meses como parte da manutenção de rotina.
+                
+                * Também pode considerar usar-lo sempre quando o Windows é desligado
+                de maneira anormal (Queda de energia, Falha no sistema).
     """)
     input('Pressione ENTER para sair...')
