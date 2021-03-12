@@ -1,8 +1,8 @@
 import PyInstaller.__main__
-from shutil import rmtree, copyfile
-from os import system, getlogin
+from os import remove, getcwd
+import shutil
 
-raiz = f'C:Users/{getlogin()}/Documents/git/repositorios/MaidOS/'
+
 def compilar():
     PyInstaller.__main__.run([
         'main.py',
@@ -15,11 +15,12 @@ def compilar():
 
 
 def organizar():
-    #rmtree('build')
-    #system('del /F /A " MaidOS.spec"')
-    system(f'move "{raiz}.py/dist/MaidOS.exe" "{raiz}"')
-    #rmtree('dist')
+    remove(f'{getcwd()[-3]}/ MaidOS.exe')
+    shutil.rmtree('build')
+    remove(' MaidOS.spec')
+    shutil.copy('dist/ MaidOS.exe', f'{getcwd()[:-3]}')
+    shutil.rmtree('dist')
 
 
-#compilar()
+compilar()
 organizar()
