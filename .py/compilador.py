@@ -4,7 +4,7 @@ PyInstaller.__main__.run([
     'main.py',
     '--onefile',
     '--clean',
-    '-n Faxina',
+    '-n MaidOS',
     '--log-level=WARN',
     '--add-data="faxina.py:."'
 ])
