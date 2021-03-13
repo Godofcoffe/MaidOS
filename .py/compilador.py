@@ -15,7 +15,6 @@ def compilar():
 
 
 def organizar():
-    remove(f'{getcwd()[-3]}/ MaidOS.exe')
     rmtree('build')
     remove(' MaidOS.spec')
     copy('dist/ MaidOS.exe', f'{getcwd()[:-3]}')
