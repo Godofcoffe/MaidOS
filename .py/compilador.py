@@ -1,6 +1,6 @@
 import PyInstaller.__main__
 from os import remove, getcwd
-from shutil import rmtree,copy
+from shutil import rmtree, copy
 
 
 def compilar():
