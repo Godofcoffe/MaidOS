@@ -1,6 +1,6 @@
 import PyInstaller.__main__
 from os import remove, getcwd
-import shutil
+from shutil import rmtree,copy
 
 
 def compilar():
@@ -16,10 +16,10 @@ def compilar():
 
 def organizar():
     remove(f'{getcwd()[-3]}/ MaidOS.exe')
-    shutil.rmtree('build')
+    rmtree('build')
     remove(' MaidOS.spec')
-    shutil.copy('dist/ MaidOS.exe', f'{getcwd()[:-3]}')
-    shutil.rmtree('dist')
+    copy('dist/ MaidOS.exe', f'{getcwd()[:-3]}')
+    rmtree('dist')
 
 
 compilar()
