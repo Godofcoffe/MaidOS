@@ -3,6 +3,4 @@
 ***
 ![screenshot](/.exemplo/TEMPLATE.PNG)
 ***
-* Clique aqui para ver a nota de atualização e baixar a última versão:
-
-[link](https://github.com/Godofcoffe/MaidOS/releases/latest)
+* [Clique aqui para ver a nota de atualização e baixar a última versão](https://github.com/Godofcoffe/MaidOS/releases/latest)
