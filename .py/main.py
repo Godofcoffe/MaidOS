@@ -1,28 +1,32 @@
 from faxina import *
+from form_text import *
+from colorama import init
 
-print(f'{"MaidOS":.^55}')
+init()
+print(color_text('white', f'{"MaidOS":.^55}'))
 print(f'{Maid().info()[0]:>55}')
 print(f'Autor: {Maid().info()[1]}\n')
 if Maid().upgrade() != Maid().info()[0]:
-    print(f'> Há uma nova versão disponivel <\n'.center(55))
+    print(color_text('yellow', f'> Há uma nova versão disponivel <\n'.center(55)))
 print(f'Oque eu posso fazer por você hoje {Maid().usr}?')
-print('Digite "?" para exibir mais informações sobre as funções.')
-print("""
-[ 1 ] Limpar cache de Apps e arquivos temporarios
-[ 2 ] Escanear e reparar arquivos do sistema operacional
-[ 3 ] Verificação de disco
-[ 0 ] Sair
+print('Digite', color_text('white', '"?"'), 'para exibir mais informações sobre as funções.')
+print(f"""
+{color_text('yellow', '[ 1 ]')} Limpar cache de Apps e arquivos temporarios
+{color_text('yellow', '[ 2 ]')} Escanear e reparar arquivos do sistema operacional
+{color_text('yellow', '[ 3 ]')} Verificação de disco
+{color_text('yellow', '[ 0 ]')} Sair
 """)
 
 while True:
-    on = str(input('Opção > ')).strip()[0]
+    print(color_text('white', 'Opção > '), end='')
+    on = str(input()).strip()[0]
     if on in '0123?':
         break
 
 system('cls')
 if on == '1':
     Maid().verificarpermissao(Maid().diretorios, True)
-    print('Os arquivos serão apagados nestes seguintes diretórios:')
+    print(color_text('yellow', 'Os arquivos serão apagados nestes seguintes diretórios!:'))
     for caminho in Maid().dirsPermitidos:
         if Maid().tamDir(caminho) >= 1000000000:
             print(f'{caminho} - ({Maid().tamDir(caminho) / 1000000000:.1f})GB de espaço ocupado.')
@@ -31,16 +35,17 @@ if on == '1':
         elif Maid().tamDir(caminho) < 1000000:
             print(f'{caminho} - ({Maid().tamDir(caminho) / 1000:.1f})kB de espaço ocupado.')
 
-    print("""
-    [ 1 ] Somente diretórios cache
-    [ 2 ] Somente diretório cache do Windows Update
-    [ 3 ] Somente cache DNS
-    [ 4 ] Limpeza completa
-    [ 0 ] Cancelar
+    print(f"""
+    {color_text('yellow', '[ 1 ]')} Somente diretórios cache
+    {color_text('yellow', '[ 2 ]')} Somente diretório cache do Windows Update
+    {color_text('yellow', '[ 3 ]')} Somente cache DNS
+    {color_text('yellow', '[ 4 ]')} Limpeza completa
+    {color_text('yellow', '[ 0 ]')} Cancelar
     """)
     while True:
-        confirm = str(input('Opção > ')).strip()[0]
-        if '12340' in confirm:
+        print(color_text('white', 'Opção > '), end='')
+        confirm = str(input()).strip()[0]
+        if confirm in '01234':
             break
 
     if confirm == '1':
@@ -59,7 +64,7 @@ if on == '1':
         Maid().cacheDNS()
 
     elif confirm == '0':
-        print('encerrando...')
+        print(color_text('white', 'Encerrando...'))
         sleep(2)
 
 elif on == '2':
@@ -69,7 +74,7 @@ elif on == '3':
     Maid().chkdsk()
 
 elif on == '0':
-    print('ENCERRANDO...')
+    print(color_text('white', 'ENCERRANDO...'))
     sleep(2)
 
 elif on == '?':
