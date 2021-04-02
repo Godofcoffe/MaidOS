@@ -2,6 +2,7 @@ from os import scandir, remove, getlogin, system, path
 from time import sleep
 from shutil import rmtree
 from requests import get
+from form_text import *
 
 
 class Maid:
@@ -43,26 +44,30 @@ class Maid:
                         try:
                             remove(diretorio + '/' + arq.name)
                         except WindowsError:
-                            print(f'[ * ] Não posso apagar o arquivo {arq.name} '
-                                  f'e/ou ele está sendo executado.')
+                            print(f'[ {color_text("red", "*")} ] ',
+                                  color_text('yellow', f'Não posso apagar o arquivo {arq.name} '
+                                                       f'e/ou ela está sendo executada.'))
                             sleep(1)
                         else:
-                            print(f'[ + ] {arq.name} apagado!')
+                            print(f'[ {color_text("green", "+")} ] ',
+                                  f'{arq.name} apagado!')
                             cont += 1
                             sleep(0.2)
 
                     elif arq.is_dir():
-                        print(f'[ / ] Removendo {arq.name}')
                         try:
                             rmtree(diretorio + '/' + arq.name)
                         except WindowsError:
-                            print(f'[ * ] Não posso apagar a pasta {arq.name} '
-                                  f'e/ou ela está sendo executada.')
+                            print(f'[ {color_text("red", "*")} ] ',
+                                  color_text('yellow', f'Não posso apagar a pasta {arq.name} '
+                                                       f'e/ou ela está sendo executada.'))
                             sleep(1)
                         else:
-                            print(f'[ + ] {arq.name} apagada!')
+                            print(f'[ {color_text("green", "+")} ] ',
+                                  f'{arq.name} apagada!')
                             cont += 1
                             sleep(0.2)
+                scan.close()
 
         system('cls')
         print('limpeza completa!')
@@ -77,8 +82,8 @@ class Maid:
                 scandir(diretorio)
             except PermissionError:
                 if verbose:
-                    print(f'Não tenho permissão para entrar nesta pasta...\n{diretorio}\n'
-                          f'Tente de novo como administrador.\n')
+                    print(color_text('red', f'Não tenho permissão para entrar nesta pasta...\n{diretorio}\n'
+                                            f'Tente de novo como administrador.\n'))
             else:
                 aceitos.append(diretorio)
         return aceitos
@@ -90,7 +95,7 @@ class Maid:
                 for arq in d:
                     temp += path.getsize(arq)
         except WindowsError:
-            print(f'Não pude verificar o espaço de {diretorio}')
+            print(color_text('red', f'Não pude verificar o espaço de {diretorio}'))
         else:
             return temp
 
