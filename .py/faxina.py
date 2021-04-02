@@ -112,7 +112,7 @@ class Maid:
 
     def winupdate(self):
         system('cls')
-        if self.verificarpermissao([r'C:\Windows\SoftwareDistribution\Download']):
+        if self.verificarpermissao([r'C:\Windows\SoftwareDistribution\Download'], True):
             sleep(3)
             self.dirsPermitidos = [r'C:\Windows\SoftwareDistribution\Download']
             system('net stop wuauserv')  # para o processo de atualizações para limpeza do WinUpdate
