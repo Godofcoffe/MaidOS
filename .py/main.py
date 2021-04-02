@@ -3,12 +3,13 @@ from form_text import *
 from colorama import init
 
 init()
+M = Maid()
 print(color_text('white', f'{"MaidOS":.^55}'))
-print(f'{Maid().info()[0]:>55}')
-print(f'Autor: {Maid().info()[1]}\n')
-if Maid().upgrade() != Maid().info()[0]:
+print(f'{M.info()[0]:>55}')
+print(f'Autor: {M.info()[1]}\n')
+if M.upgrade() != M.info()[0]:
     print(color_text('yellow', f'> Há uma nova versão disponivel <\n'.center(55)))
-print(f'O que eu posso fazer por você hoje {Maid().usr}?')
+print(f'O que eu posso fazer por você hoje {M.usr}?')
 print('Digite ', color_text('white', '"?"'), ' para exibir mais informações sobre as funções.')
 print(f"""
 {color_text('yellow', '[ 1 ]')} Limpar cache de Apps e arquivos temporários
@@ -25,15 +26,15 @@ while True:
 
 system('cls')
 if on == '1':
-    Maid().verificarpermissao(Maid().diretorios, True)
+    M.verificarpermissao(M.diretorios, True)
     print(color_text('yellow', 'Os arquivos serão apagados nestes seguintes diretórios!:'))
-    for caminho in Maid().dirsPermitidos:
-        if Maid().tamDir(caminho) >= 1000000000:
-            print(f'{caminho} - ({Maid().tamDir(caminho) / 1000000000:.1f})GB de espaço ocupado.')
+    for caminho in M.dirsPermitidos:
+        if M.tamDir(caminho) >= 1000000000:
+            print(f'{caminho} - ({M.tamDir(caminho) / 1000000000:.1f})GB de espaço ocupado.')
         elif Maid().tamDir(caminho) >= 1000000:
-            print(f'{caminho} - ({Maid().tamDir(caminho) / 1000000:.1f})MB de espaço ocupado.')
+            print(f'{caminho} - ({M.tamDir(caminho) / 1000000:.1f})MB de espaço ocupado.')
         elif Maid().tamDir(caminho) < 1000000:
-            print(f'{caminho} - ({Maid().tamDir(caminho) / 1000:.1f})kB de espaço ocupado.')
+            print(f'{caminho} - ({M.tamDir(caminho) / 1000:.1f})kB de espaço ocupado.')
 
     print(f"""
 {color_text('yellow', '[ 1 ]')} Somente diretórios cache
@@ -49,29 +50,29 @@ if on == '1':
             break
 
     if confirm == '1':
-        Maid().maid()
+        M.dirsPermitidos.pop()
+        M.maid()
 
     elif confirm == '2':
-        Maid().winupdate()
+        M.winupdate()
 
     elif confirm == '3':
-        Maid().cacheDNS()
+        M.cacheDNS()
 
     elif confirm == '4':
-        Maid().diretorios.append(r'C:\Windows\SoftwareDistribution\Download')
-        Maid().maid()
-        Maid().winupdate()
-        Maid().cacheDNS()
+        M.maid()
+        M.winupdate()
+        M.cacheDNS()
 
     elif confirm == '0':
         print(color_text('white', 'Encerrando...'))
         sleep(2)
 
 elif on == '2':
-    Maid().sfc()
+    M.sfc()
 
 elif on == '3':
-    Maid().chkdsk()
+    M.chkdsk()
 
 elif on == '0':
     print(color_text('white', 'ENCERRANDO...'))
@@ -85,9 +86,9 @@ elif on == '?':
             atualizações do WindowsUpdate.
                 E os diretórios são:
                     C:\Windows\Temp,
-                    C:\Users\{Maid().usr}\AppData\Local\Temp,
+                    C:\Users\{M.usr}\AppData\Local\Temp,
                     C:\Windows\Prefetch,
-                    C:\Users\{Maid().usr}\Recent,
+                    C:\Users\{M.usr}\Recent,
                     C:\Windows\SoftwareDistribution\Download
 
         Escanear e reparar arquivos do sistema operacional:

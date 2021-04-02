@@ -13,7 +13,8 @@ class Maid:
         self.diretorios = [r'c:\Windows\Temp',
                            rf'C:\Users\{self.usr}\AppData\Local\Temp',
                            r'C:\Windows\Prefetch',
-                           rf'C:\Users\{self.usr}\Recent']
+                           rf'C:\Users\{self.usr}\Recent',
+                           r'C:\Windows\SoftwareDistribution\Download']
         self.tamTotal = 0
         self.dirsPermitidos = self.verificarpermissao(self.diretorios)
         self.carregarTamanho()
