@@ -8,10 +8,10 @@ print(f'{Maid().info()[0]:>55}')
 print(f'Autor: {Maid().info()[1]}\n')
 if Maid().upgrade() != Maid().info()[0]:
     print(color_text('yellow', f'> Há uma nova versão disponivel <\n'.center(55)))
-print(f'Oque eu posso fazer por você hoje {Maid().usr}?')
-print('Digite', color_text('white', '"?"'), 'para exibir mais informações sobre as funções.')
+print(f'O que eu posso fazer por você hoje {Maid().usr}?')
+print('Digite ', color_text('white', '"?"'), ' para exibir mais informações sobre as funções.')
 print(f"""
-{color_text('yellow', '[ 1 ]')} Limpar cache de Apps e arquivos temporarios
+{color_text('yellow', '[ 1 ]')} Limpar cache de Apps e arquivos temporários
 {color_text('yellow', '[ 2 ]')} Escanear e reparar arquivos do sistema operacional
 {color_text('yellow', '[ 3 ]')} Verificação de disco
 {color_text('yellow', '[ 0 ]')} Sair
@@ -36,11 +36,11 @@ if on == '1':
             print(f'{caminho} - ({Maid().tamDir(caminho) / 1000:.1f})kB de espaço ocupado.')
 
     print(f"""
-    {color_text('yellow', '[ 1 ]')} Somente diretórios cache
-    {color_text('yellow', '[ 2 ]')} Somente diretório cache do Windows Update
-    {color_text('yellow', '[ 3 ]')} Somente cache DNS
-    {color_text('yellow', '[ 4 ]')} Limpeza completa
-    {color_text('yellow', '[ 0 ]')} Cancelar
+{color_text('yellow', '[ 1 ]')} Somente diretórios cache
+{color_text('yellow', '[ 2 ]')} Somente diretório cache do Windows Update
+{color_text('yellow', '[ 3 ]')} Somente cache DNS
+{color_text('yellow', '[ 4 ]')} Limpeza completa
+{color_text('yellow', '[ 0 ]')} Cancelar
     """)
     while True:
         print(color_text('green', 'Opção > '), end='')
