@@ -18,7 +18,7 @@ print(f"""
 """)
 
 while True:
-    print(color_text('white', 'Opção > '), end='')
+    print(color_text('green', 'Opção > '), end='')
     on = str(input()).strip()[0]
     if on in '0123?':
         break
@@ -43,7 +43,7 @@ if on == '1':
     {color_text('yellow', '[ 0 ]')} Cancelar
     """)
     while True:
-        print(color_text('white', 'Opção > '), end='')
+        print(color_text('green', 'Opção > '), end='')
         confirm = str(input()).strip()[0]
         if confirm in '01234':
             break
