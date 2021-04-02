@@ -31,11 +31,34 @@ if on == '1':
         elif Maid().tamDir(caminho) < 1000000:
             print(f'{caminho} - ({Maid().tamDir(caminho) / 1000:.1f})kB de espaço ocupado.')
 
-    confirm = str(input('Prosseguir [s/n]?: ')).strip().lower()[0]
-    if confirm == 's':
+    print("""
+    [ 1 ] Somente diretórios cache
+    [ 2 ] Somente diretório cache do Windows Update
+    [ 3 ] Somente cache DNS
+    [ 4 ] Limpeza completa
+    [ 0 ] Cancelar
+    """)
+    while True:
+        confirm = str(input('Opção > ')).strip()[0]
+        if '12340' in confirm:
+            break
+
+    if confirm == '1':
         Maid().maid()
 
-    elif confirm == 'n':
+    elif confirm == '2':
+        Maid().winupdate()
+
+    elif confirm == '3':
+        Maid().cacheDNS()
+
+    elif confirm == '4':
+        Maid().diretorios.append(r'C:\Windows\SoftwareDistribution\Download')
+        Maid().maid()
+        Maid().winupdate()
+        Maid().cacheDNS()
+
+    elif confirm == '0':
         print('encerrando...')
         sleep(2)
 
@@ -50,17 +73,17 @@ elif on == '0':
     sleep(2)
 
 elif on == '?':
-    print(f"""
+    print(rf"""
         Limpar cache de apps e arquivos temporários:
             Apaga TODOS os aquivos POSSIVEIS em diretórios conhecidos que armazenam o cache de aplicações
             e arquivos usados anteriormente por aplicativos já desistalados e também incluindo o cache de
             atualizações do WindowsUpdate.
                 E os diretórios são:
-                    c:/Windows/Temp,
-                    c:/Users/{Maid().usr}/AppData/Local/Temp,
-                    c:/Windows/Prefetch,
-                    c:/Users/{Maid().usr}/Recent,
-                    c:/Windows/SoftwareDistribution/Download
+                    C:\Windows\Temp,
+                    C:\Users\{Maid().usr}\AppData\Local\Temp,
+                    C:\Windows\Prefetch,
+                    C:\Users\{Maid().usr}\Recent,
+                    C:\Windows\SoftwareDistribution\Download
 
         Escanear e reparar arquivos do sistema operacional:
             Verifica a integridade de todos os arquivos do sistema protegidos

@@ -6,14 +6,13 @@ from requests import get
 
 class Maid:
     def __init__(self):
-        self.__versaoAtual = 'v1.2.0'
+        self.__versaoAtual = 'v1.3.0'
         self.__autor = 'Godofcoffe'
         self.usr = getlogin()
-        self.diretorios = ['c:/Windows/Temp',
-                           f'c:/Users/{self.usr}/AppData/Local/Temp',
-                           'c:/Windows/Prefetch',
-                           f'c:/Users/{self.usr}/Recent',
-                           'c:/Windows/SoftwareDistribution/Download']
+        self.diretorios = [r'c:\Windows\Temp',
+                           rf'C:\Users\{self.usr}\AppData\Local\Temp',
+                           r'C:\Windows\Prefetch',
+                           rf'C:\Users\{self.usr}\Recent']
         self.tamTotal = 0
         self.dirsPermitidos = self.verificarpermissao(self.diretorios)
         self.carregarTamanho()
@@ -33,7 +32,6 @@ class Maid:
     def maid(self, os='windows'):
         cont = 0
         if os == 'windows':
-            system('net stop wuauserv')  # para o processo de atualizações para limpeza do WinUpdate
             sleep(4)
             for diretorio in self.dirsPermitidos:
                 scan = scandir(diretorio)
@@ -65,11 +63,6 @@ class Maid:
                             print(f'[ + ] {arq.name} apagada!')
                             cont += 1
                             sleep(0.2)
-        sleep(3)
-        system('cls')
-        self.cacheDNS()
-        system('net start wuauserv')  # inicia o processo de atualizações
-        sleep(4)
 
         system('cls')
         print('limpeza completa!')
@@ -108,4 +101,15 @@ class Maid:
         system('chkdsk /R /V')
 
     def cacheDNS(self):
+        system('cls')
         system('ipconfig /flushdns')
+        sleep(4)
+
+    def winupdate(self):
+        system('cls')
+        if self.verificarpermissao([r'C:\Windows\SoftwareDistribution\Download']):
+            sleep(3)
+            self.dirsPermitidos = [r'C:\Windows\SoftwareDistribution\Download']
+            system('net stop wuauserv')  # para o processo de atualizações para limpeza do WinUpdate
+            self.maid()
+            system('net start wuauserv')  # inicia o processo de atualizações
