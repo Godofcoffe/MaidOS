@@ -8,7 +8,7 @@ def compilar():
         'main.py',
         '--onefile',
         '--clean',
-        '-n MaidOS32',
+        '-n MaidOS86',
         '--log-level=WARN',
         '--add-data=faxina.py;.'
     ])
@@ -16,9 +16,10 @@ def compilar():
 
 def organizar():
     rmtree('build')
-    remove(' MaidOS32.spec')
-    copy('dist/ MaidOS32.exe', f'{getcwd()[:-3]}')
+    remove(' MaidOS86.spec')
+    copy('dist/ MaidOS86.exe', f'{getcwd()[:-3]}')
     rmtree('dist')
+
 
 compilar()
 organizar()
