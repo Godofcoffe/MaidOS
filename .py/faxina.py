@@ -116,6 +116,7 @@ class Maid:
         if self.verificarpermissao([r'C:\Windows\SoftwareDistribution\Download'], True):
             sleep(3)
             self.dirsPermitidos = [r'C:\Windows\SoftwareDistribution\Download']
+            self.carregarTamanho()
             system('net stop wuauserv')  # para o processo de atualizações para limpeza do WinUpdate
             self.maid()
             system('net start wuauserv')  # inicia o processo de atualizações
