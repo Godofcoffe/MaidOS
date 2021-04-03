@@ -1,7 +1,8 @@
-from os import scandir, remove, getlogin, system, path, getuid
+from os import scandir, remove, getlogin, system, path
 from subprocess import run
-from platform import platform
 from ctypes import windll
+from sys import argv, executable
+from platform import platform
 from time import sleep
 from shutil import rmtree
 from requests import get
@@ -25,12 +26,11 @@ class Maid:
     def info(self):
         return self.__versaoAtual, self.__autor
 
-    def is_admin(self):
+    def admin(self):
         try:
-            is_admin = (getuid() == 0)
-        except AttributeError:
-            is_admin = windll.shell32.IsUserAnAdmin() != 0
-        return is_admin
+            return windll.shell32.IsUserAnAdmin()
+        except:
+            return False
 
     def upgrade(self):
         r = get('https://api.github.com/repos/Godofcoffe/MaidOS/releases/latest')
@@ -111,7 +111,7 @@ class Maid:
             return temp
 
     def sfc(self):
-        if self.is_admin():
+        if self.admin():
             if platform()[:9] == 'Windows-10' or 'Windows-8' or 'Windows-8.1':
                 try:
                     saida = run(['DISM.exe', '/Online', '/Cleanup-image', '/Restorehealth'],
@@ -134,10 +134,10 @@ class Maid:
                 else:
                     print(saida.stdout)
         else:
-            print(color_text('red', 'Não tenho privilégios de Administrador.'))
+            windll.shell32.ShellExecuteW(None, "runas", executable, " ".join(argv), None, 1)
 
     def chkdsk(self):
-        if self.is_admin():
+        if self.admin():
             try:
                 saida = run(['chkdsk', '/F', '/R', '/V'], shell=True, capture_output=True, text=True)
             except WindowsError as error:
@@ -145,7 +145,7 @@ class Maid:
             else:
                 print(saida.stdout)
         else:
-            print(color_text('red', 'Não tenho privilégios de Administrador.'))
+            windll.shell32.ShellExecuteW(None, "runas", executable, " ".join(argv), None, 1)
 
     def cacheDNS(self):
         system('cls')
