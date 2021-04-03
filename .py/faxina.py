@@ -1,4 +1,7 @@
-from os import scandir, remove, getlogin, system, path
+from os import scandir, remove, getlogin, system, path, getuid
+from subprocess import run
+from platform import platform
+from ctypes import windll
 from time import sleep
 from shutil import rmtree
 from requests import get
@@ -21,6 +24,13 @@ class Maid:
 
     def info(self):
         return self.__versaoAtual, self.__autor
+
+    def is_admin(self):
+        try:
+            is_admin = (getuid() == 0)
+        except AttributeError:
+            is_admin = windll.shell32.IsUserAnAdmin() != 0
+        return is_admin
 
     def upgrade(self):
         r = get('https://api.github.com/repos/Godofcoffe/MaidOS/releases/latest')
@@ -101,10 +111,41 @@ class Maid:
             return temp
 
     def sfc(self):
-        system('sfc /scannow')
+        if self.is_admin():
+            if platform()[:9] == 'Windows-10' or 'Windows-8' or 'Windows-8.1':
+                try:
+                    saida = run(['DISM.exe', '/Online', '/Cleanup-image', '/Restorehealth'],
+                                shell=True, capture_output=True, text=True)
+                except WindowsError as error:
+                    print(color_text('red', f'Ocorreu um erro inesperado no processo DISM.EXE: {error}'))
+                else:
+                    print(saida.stdout)
+                    try:
+                        saida = run(['sfc', '/scannow'], shell=True, capture_output=True, text=True)
+                    except WindowsError as error:
+                        print(color_text('red', f'Ocorreu um erro inesperado no processo SFC: {error}'))
+                    else:
+                        print(saida.stdout)
+            else:
+                try:
+                    saida = run(['sfc', '/scannow'], shell=True, capture_output=True, text=True)
+                except WindowsError as error:
+                    print(color_text('red', f'Ocorreu um erro inesperado no processo SFC: {error}'))
+                else:
+                    print(saida.stdout)
+        else:
+            print(color_text('red', 'Não tenho privilégios de Administrador.'))
 
     def chkdsk(self):
-        system('chkdsk /R /V')
+        if self.is_admin():
+            try:
+                saida = run(['chkdsk', '/F', '/R', '/V'], shell=True, capture_output=True, text=True)
+            except WindowsError as error:
+                print(color_text('red', f'Ocorre um erro inesperado no chkdsk: {error}'))
+            else:
+                print(saida.stdout)
+        else:
+            print(color_text('red', 'Não tenho privilégios de Administrador.'))
 
     def cacheDNS(self):
         system('cls')

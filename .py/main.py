@@ -92,8 +92,24 @@ elif on == '?':
                     C:\Windows\SoftwareDistribution\Download
 
         Escanear e reparar arquivos do sistema operacional:
-            Verifica a integridade de todos os arquivos do sistema protegidos
-            e repara os arquivos com problemas quando possível.
+            Se algumas funções do Windows não estiverem funcionando ou se o Windows falhar,
+            use o Verificador de Arquivos do Sistema para examinar o Windows e restaurar os arquivos.
+            
+            Se você estiver executando o Windows 10, o Windows 8.1 ou o Windows 8,
+            será executato primeiro a ferramenta DISM (Gerenciamento e Manutenção de Imagens de Implantação)
+            
+            Importante: Quando for executado esse comando,
+            o DISM usa o Windows Update para fornecer os arquivos necessários para corrigir as corrupções.
+            
+            Já no Windows 7:
+            Será usado o comando sfc /scannow para verificar todos os arquivos protegidos do sistema, 
+            substituindo os arquivos corrompidos por uma cópia em cache que está localizada em uma pasta compactada
+            em %WinDir%\System32\dllcache.
+            O espaço reservado %WinDir% representa a pasta do sistema operacional Windows.
+            Por exemplo, C:\Windows.
+
+            Observação Não feche esta janela do Prompt de Comando até que a verificação esteja 100% concluída.
+            Os resultados da verificação serão mostrados depois que esse processo for concluído.
 
         Verificação de disco:
              Executa o comando nativo do windows CHKDSK, ele verifica a integridade do sistema de arquivos e
