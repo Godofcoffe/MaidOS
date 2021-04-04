@@ -53,7 +53,7 @@ class Maid:
                 for arq in scan:
                     if arq.is_file():
                         try:
-                            remove(diretorio + '/' + arq.name)
+                            remove(rf'{diretorio}\{arq.name}')
                         except WindowsError:
                             print(f'[ {color_text("red", "*")} ] ',
                                   color_text('yellow', f'Não posso apagar o arquivo {arq.name} '
@@ -67,7 +67,7 @@ class Maid:
 
                     elif arq.is_dir():
                         try:
-                            rmtree(diretorio + '/' + arq.name)
+                            rmtree(rf'{diretorio}\{arq.name}')
                         except WindowsError:
                             print(f'[ {color_text("red", "*")} ] ',
                                   color_text('yellow', f'Não posso apagar a pasta {arq.name} '
@@ -131,27 +131,23 @@ class Maid:
                     else:
                         print(saida.stdout)
             else:
+                sleep(1)
                 try:
                     print(color_text('green', 'Executando sfc:'))
                     sleep(1)
                     saida = run(['sfc', '/scannow'], shell=True, capture_output=True, text=True)
                 except WindowsError as error:
                     print(color_text('red', f'Ocorreu um erro inesperado no processo SFC: {error}'))
-                else:
-                    print(saida.stdout)
         else:
             windll.shell32.ShellExecuteW(None, "runas", executable, " ".join(argv), None, 1)
 
     def chkdsk(self):
         if self.admin():
+            sleep(1)
             try:
-                print(color_text('green', 'Executando CHKDSK:'))
-                sleep(1)
-                saida = run(['chkdsk', '/F', '/R', '/V'], shell=True, capture_output=True, text=True)
+                system('chkdsk /F /R /V')
             except WindowsError as error:
-                print(color_text('red', f'Ocorre um erro inesperado no chkdsk: {error}'))
-            else:
-                print(saida.stdout)
+                print(color_text('red', f'Ocorreu um erro inesperado no chkdsk: {error}'))
         else:
             windll.shell32.ShellExecuteW(None, "runas", executable, " ".join(argv), None, 1)
 
