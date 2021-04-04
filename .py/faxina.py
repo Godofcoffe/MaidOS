@@ -112,8 +112,10 @@ class Maid:
 
     def sfc(self):
         if self.admin():
-            if platform()[:9] == 'Windows-10' or 'Windows-8' or 'Windows-8.1':
+            if 'Windows-10' or 'Windows-8' in platform()[:10]:
                 try:
+                    print(color_text('green', 'Executando DISM.EXE:'))
+                    sleep(1)
                     saida = run(['DISM.exe', '/Online', '/Cleanup-image', '/Restorehealth'],
                                 shell=True, capture_output=True, text=True)
                 except WindowsError as error:
@@ -121,6 +123,8 @@ class Maid:
                 else:
                     print(saida.stdout)
                     try:
+                        print(color_text('green', 'Executando sfc:'))
+                        sleep(1)
                         saida = run(['sfc', '/scannow'], shell=True, capture_output=True, text=True)
                     except WindowsError as error:
                         print(color_text('red', f'Ocorreu um erro inesperado no processo SFC: {error}'))
@@ -128,6 +132,8 @@ class Maid:
                         print(saida.stdout)
             else:
                 try:
+                    print(color_text('green', 'Executando sfc:'))
+                    sleep(1)
                     saida = run(['sfc', '/scannow'], shell=True, capture_output=True, text=True)
                 except WindowsError as error:
                     print(color_text('red', f'Ocorreu um erro inesperado no processo SFC: {error}'))
@@ -139,6 +145,8 @@ class Maid:
     def chkdsk(self):
         if self.admin():
             try:
+                print(color_text('green', 'Executando CHKDSK:'))
+                sleep(1)
                 saida = run(['chkdsk', '/F', '/R', '/V'], shell=True, capture_output=True, text=True)
             except WindowsError as error:
                 print(color_text('red', f'Ocorre um erro inesperado no chkdsk: {error}'))
@@ -155,7 +163,7 @@ class Maid:
     def winupdate(self):
         system('cls')
         if self.verificarpermissao([r'C:\Windows\SoftwareDistribution\Download'], True):
-            sleep(3)
+            sleep(2)
             self.dirsPermitidos = [r'C:\Windows\SoftwareDistribution\Download']
             self.carregarTamanho()
             system('net stop wuauserv')  # para o processo de atualizações para limpeza do WinUpdate
