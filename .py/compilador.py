@@ -1,6 +1,5 @@
 import PyInstaller.__main__
-from os import remove, getcwd
-from shutil import rmtree, copy
+from subprocess import run
 
 
 def compilar():
@@ -10,15 +9,15 @@ def compilar():
         '--clean',
         '-n MaidOS',
         '--log-level=WARN',
-        '--add-data=faxina.py;.'
+        '--add-data=faxina.py:.'
     ])
 
 
 def organizar():
-    rmtree('build')
-    remove(' MaidOS.spec')
-    copy('dist/ MaidOS.exe', f'{getcwd()[:-3]}')
-    rmtree('dist')
+    run(['rm', '-rf', 'build'], shell=True)
+    run(['rm', '-rf', ' MaidOS.spec'], shell=True)
+    run(['cp', 'dist/ MaidOS.exe', '..'], shell=True)
+    run(['rm', 'rf', 'dist'], shell=True)
 
 
 compilar()
