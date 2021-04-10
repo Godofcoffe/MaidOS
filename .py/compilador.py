@@ -1,5 +1,4 @@
 import PyInstaller.__main__
-from subprocess import run
 
 
 def compilar():
@@ -13,12 +12,4 @@ def compilar():
     ])
 
 
-def organizar():
-    run(['rm', '-rf', 'build'], shell=True)
-    run(['rm', '-rf', ' MaidOS.spec'], shell=True)
-    run(['cp', 'dist/ MaidOS.exe', '..'], shell=True)
-    run(['rm', 'rf', 'dist'], shell=True)
-
-
 compilar()
-organizar()
