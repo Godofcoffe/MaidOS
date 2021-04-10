@@ -6,10 +6,10 @@ def compilar():
     PyInstaller.__main__.run([
         'main.py',
         '--onefile',
-        '--clean',
-        '-n MaidOS',
+        '-n MaidOS.exe',
         '--log-level=WARN',
-        '--add-data=faxina.py:.'
+        '--add-data=faxina.py:.',
+	'--upx-dir=/usr/local/share/'
     ])
 
 
