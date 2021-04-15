@@ -7,10 +7,10 @@ M = Maid()
 print(color_text('white', f'{"MaidOS":.^55}'))
 print(f'{M.info()[0]:>55}')
 print(f'Autor: {M.info()[1]}\n')
-if M.upgrade() != M.info()[0]:
+if update() != M.info()[0]:
     print(color_text('yellow', f'> Há uma nova versão disponivel <\n'.center(55)))
 print(f'O que eu posso fazer por você hoje {M.usr}?')
-print('Digite ', color_text('white', '"?"'), ' para exibir mais informações sobre as funções.')
+print('Digite', color_text('white', '"?"'), 'para exibir mais informações sobre as funções.')
 print(f"""
 {color_text('yellow', '[ 1 ]')} Limpar cache de Apps e arquivos temporários
 {color_text('yellow', '[ 2 ]')} Escanear e reparar arquivos do sistema operacional
@@ -26,15 +26,15 @@ while True:
 
 system('cls')
 if on == '1':
-    M.verificarpermissao(M.diretorios, True)
+    verificarpermissao(M.diretorios, True)
     print(color_text('yellow', 'Os arquivos serão apagados nestes seguintes diretórios!:'))
     for caminho in M.dirsPermitidos:
-        if M.tamDir(caminho) >= 1000000000:
-            print(f'{caminho} - ({M.tamDir(caminho) / 1000000000:.1f})GB de espaço ocupado.')
-        elif Maid().tamDir(caminho) >= 1000000:
-            print(f'{caminho} - ({M.tamDir(caminho) / 1000000:.1f})MB de espaço ocupado.')
-        elif Maid().tamDir(caminho) < 1000000:
-            print(f'{caminho} - ({M.tamDir(caminho) / 1000:.1f})kB de espaço ocupado.')
+        if tam_dir(caminho) >= 1000000000:
+            print(f'{caminho} - ({tam_dir(caminho) / 1000000000:.1f})GB de espaço ocupado.')
+        elif tam_dir(caminho) >= 1000000:
+            print(f'{caminho} - ({tam_dir(caminho) / 1000000:.1f})MB de espaço ocupado.')
+        elif tam_dir(caminho) < 1000000:
+            print(f'{caminho} - ({tam_dir(caminho) / 1000:.1f})kB de espaço ocupado.')
 
     print(f"""
 {color_text('yellow', '[ 1 ]')} Somente diretórios cache
@@ -57,22 +57,22 @@ if on == '1':
         M.winupdate()
 
     elif confirm == '3':
-        M.cacheDNS()
+        cache_dns()
 
     elif confirm == '4':
         M.maid()
         M.winupdate()
-        M.cacheDNS()
+        cache_dns()
 
     elif confirm == '0':
         print(color_text('white', 'Encerrando...'))
         sleep(2)
 
 elif on == '2':
-    M.sfc()
+    sfc()
 
 elif on == '3':
-    M.chkdsk()
+    chkdsk()
 
 elif on == '0':
     print(color_text('white', 'ENCERRANDO...'))
