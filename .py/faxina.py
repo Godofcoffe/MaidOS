@@ -123,37 +123,36 @@ class Maid:
         cont = 0
         sleep(4)
         for diretorio in self.dirsPermitidos:
-            scan = scandir(diretorio)
             system('cls')
             print(f'[ / ] Abrindo {diretorio}')
             sleep(2)
-            for arq in scan:
-                if arq.is_file():
-                    try:
-                        remove(rf'{diretorio}\{arq.name}')
-                    except WindowsError:
-                        print(f'[ {color_text("red", "*")} ] ',
-                              color_text('yellow', f'Não posso apagar o arquivo {arq.name} '
-                                                   f'e/ou ela está sendo executada.'))
-                        sleep(1)
-                    else:
-                        print(f'[ {color_text("green", "+")} ] ',
-                              f'{arq.name} apagado!')
-                        cont += 1
+            with scandir(diretorio) as scan:
+                for arq in scan:
+                    if arq.is_file():
+                        try:
+                            remove(rf'{diretorio}\{arq.name}')
+                        except WindowsError:
+                            print(f'[ {color_text("red", "*")} ] ',
+                                  color_text('yellow', f'Não posso apagar o arquivo {arq.name} '
+                                                       f'e/ou ele está sendo executado.'))
+                            sleep(1)
+                        else:
+                            print(f'[ {color_text("green", "+")} ] ',
+                                  f'{arq.name} apagado!')
+                            cont += 1
 
-                elif arq.is_dir():
-                    try:
-                        rmtree(rf'{diretorio}\{arq.name}')
-                    except WindowsError:
-                        print(f'[ {color_text("red", "*")} ] ',
-                              color_text('yellow', f'Não posso apagar a pasta {arq.name} '
-                                                   f'e/ou ela está sendo executada.'))
-                        sleep(1)
-                    else:
-                        print(f'[ {color_text("green", "+")} ] ',
-                              f'{arq.name} apagada!')
-                        cont += 1
-            scan.close()
+                    elif arq.is_dir():
+                        try:
+                            rmtree(rf'{diretorio}\{arq.name}')
+                        except WindowsError:
+                            print(f'[ {color_text("red", "*")} ] ',
+                                  color_text('yellow', f'Não posso apagar a pasta {arq.name} '
+                                                       f'e/ou ela está sendo executada.'))
+                            sleep(1)
+                        else:
+                            print(f'[ {color_text("green", "+")} ] ',
+                                  f'{arq.name} apagada!')
+                            cont += 1
 
         system('cls')
         print('limpeza completa!')
