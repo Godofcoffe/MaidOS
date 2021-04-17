@@ -1,70 +1,115 @@
 from faxina import *
+from form_text import *
+from colorama import init
 
-print(f'{"MaidOS":.^55}')
-print(f'{Maid().info()[0]:>55}')
-print(f'Autor: {Maid().info()[1]}\n')
-if Maid().upgrade() != Maid().info()[0]:
-    print(f'> Há uma nova versão disponivel <\n'.center(55))
-print(f'Oque eu posso fazer por você hoje {Maid().usr}?')
-print('Digite "?" para exibir mais informações sobre as funções.')
-print("""
-[ 1 ] Limpar cache de Apps e arquivos temporarios
-[ 2 ] Escanear e reparar arquivos do sistema operacional
-[ 3 ] Verificação de disco
-[ 0 ] Sair
+init()
+M = Maid()
+print(color_text('white', f'{"MaidOS":.^55}'))
+print(f'{M.info()[0]:>55}')
+print(f'Autor: {M.info()[1]}\n')
+if update() != M.info()[0]:
+    print(color_text('yellow', f'> Há uma nova versão disponivel <\n'.center(55)))
+print(f'O que eu posso fazer por você hoje {M.usr}?')
+print('Digite', color_text('white', '"?"'), 'para exibir mais informações sobre as funções.')
+print(f"""
+{color_text('yellow', '[ 1 ]')} Limpar cache de Apps e arquivos temporários
+{color_text('yellow', '[ 2 ]')} Escanear e reparar arquivos do sistema operacional
+{color_text('yellow', '[ 3 ]')} Verificação de disco
+{color_text('yellow', '[ 0 ]')} Sair
 """)
 
 while True:
-    on = str(input('Opção > ')).strip()[0]
+    print(color_text('green', 'Opção > '), end='')
+    on = str(input()).strip()[0]
     if on in '0123?':
         break
 
 system('cls')
 if on == '1':
-    Maid().verificarpermissao(Maid().diretorios, True)
-    print('Os arquivos serão apagados nestes seguintes diretórios:')
-    for caminho in Maid().dirsPermitidos:
-        if Maid().tamDir(caminho) >= 1000000000:
-            print(f'{caminho} - ({Maid().tamDir(caminho) / 1000000000:.1f})GB de espaço ocupado.')
-        elif Maid().tamDir(caminho) >= 1000000:
-            print(f'{caminho} - ({Maid().tamDir(caminho) / 1000000:.1f})MB de espaço ocupado.')
-        elif Maid().tamDir(caminho) < 1000000:
-            print(f'{caminho} - ({Maid().tamDir(caminho) / 1000:.1f})kB de espaço ocupado.')
+    verificarpermissao(M.diretorios, True)
+    print(color_text('yellow', 'Os arquivos serão apagados nestes seguintes diretórios!:'))
+    for caminho in M.dirsPermitidos:
+        if tam_dir(caminho) >= 1000000000:
+            print(f'{caminho} - ({tam_dir(caminho) / 1000000000:.1f})GB de espaço ocupado.')
+        elif tam_dir(caminho) >= 1000000:
+            print(f'{caminho} - ({tam_dir(caminho) / 1000000:.1f})MB de espaço ocupado.')
+        elif tam_dir(caminho) < 1000000:
+            print(f'{caminho} - ({tam_dir(caminho) / 1000:.1f})kB de espaço ocupado.')
 
-    confirm = str(input('Prosseguir [s/n]?: ')).strip().lower()[0]
-    if confirm == 's':
-        Maid().maid()
+    print(f"""
+{color_text('yellow', '[ 1 ]')} Somente diretórios cache
+{color_text('yellow', '[ 2 ]')} Somente diretório cache do Windows Update
+{color_text('yellow', '[ 3 ]')} Somente cache DNS
+{color_text('yellow', '[ 4 ]')} Limpeza completa
+{color_text('yellow', '[ 0 ]')} Cancelar
+    """)
+    while True:
+        print(color_text('green', 'Opção > '), end='')
+        confirm = str(input()).strip()[0]
+        if confirm in '01234':
+            break
 
-    elif confirm == 'n':
-        print('encerrando...')
+    if confirm == '1':
+        M.dirsPermitidos.pop()
+        M.maid()
+
+    elif confirm == '2':
+        M.winupdate()
+
+    elif confirm == '3':
+        cache_dns()
+
+    elif confirm == '4':
+        M.maid()
+        M.winupdate()
+        cache_dns()
+
+    elif confirm == '0':
+        print(color_text('white', 'Encerrando...'))
         sleep(2)
 
 elif on == '2':
-    Maid().sfc()
+    sfc()
 
 elif on == '3':
-    Maid().chkdsk()
+    chkdsk()
 
 elif on == '0':
-    print('ENCERRANDO...')
+    print(color_text('white', 'ENCERRANDO...'))
     sleep(2)
 
 elif on == '?':
-    print(f"""
+    print(rf"""
         Limpar cache de apps e arquivos temporários:
             Apaga TODOS os aquivos POSSIVEIS em diretórios conhecidos que armazenam o cache de aplicações
             e arquivos usados anteriormente por aplicativos já desistalados e também incluindo o cache de
             atualizações do WindowsUpdate.
                 E os diretórios são:
-                    c:/Windows/Temp,
-                    c:/Users/{Maid().usr}/AppData/Local/Temp,
-                    c:/Windows/Prefetch,
-                    c:/Users/{Maid().usr}/Recent,
-                    c:/Windows/SoftwareDistribution/Download
+                    C:\Windows\Temp,
+                    C:\Users\{M.usr}\AppData\Local\Temp,
+                    C:\Windows\Prefetch,
+                    C:\Users\{M.usr}\Recent,
+                    C:\Windows\SoftwareDistribution\Download
 
         Escanear e reparar arquivos do sistema operacional:
-            Verifica a integridade de todos os arquivos do sistema protegidos
-            e repara os arquivos com problemas quando possível.
+            Se algumas funções do Windows não estiverem funcionando ou se o Windows falhar,
+            use o Verificador de Arquivos do Sistema para examinar o Windows e restaurar os arquivos.
+            
+            Se você estiver executando o Windows 10, o Windows 8.1 ou o Windows 8,
+            será executato primeiro a ferramenta DISM (Gerenciamento e Manutenção de Imagens de Implantação)
+            
+            Importante: Quando for executado esse comando,
+            o DISM usa o Windows Update para fornecer os arquivos necessários para corrigir as corrupções.
+            
+            Já no Windows 7:
+            Será usado o comando sfc /scannow para verificar todos os arquivos protegidos do sistema, 
+            substituindo os arquivos corrompidos por uma cópia em cache que está localizada em uma pasta compactada
+            em %WinDir%\System32\dllcache.
+            O espaço reservado %WinDir% representa a pasta do sistema operacional Windows.
+            Por exemplo, C:\Windows.
+
+            Observação Não feche esta janela do Prompt de Comando até que a verificação esteja 100% concluída.
+            Os resultados da verificação serão mostrados depois que esse processo for concluído.
 
         Verificação de disco:
              Executa o comando nativo do windows CHKDSK, ele verifica a integridade do sistema de arquivos e
