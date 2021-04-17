@@ -11,7 +11,7 @@ To edit the text color:
     elif c == 'green':
         return '\033[92m{}\033[m'.format(txt)
     elif c == 'yellow':
-        return '\033[93m{}\033[m'.format(txt)
+        return '\033[33m{}\033[m'.format(txt)
     elif c == 'blue':
         return '\033[94m{}\033[m'.format(txt)
     elif c == 'cyan':
